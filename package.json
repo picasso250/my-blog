@@ -7,12 +7,13 @@
     "dev": "concurrently \"node watch.js\" \"live-server dist -p 8080\""
   },
   "dependencies": {
+    "gray-matter": "^4.0.3",
     "marked": "^12.0.0",
-    "gray-matter": "^4.0.3"
+    "marked-footnote": "^1.4.0"
   },
   "devDependencies": {
-    "live-server": "^1.2.2",
     "chokidar": "^3.6.0",
-    "concurrently": "^8.2.0"
+    "concurrently": "^8.2.0",
+    "live-server": "^1.2.2"
   }
 }

@@ -2,6 +2,9 @@ const fs = require('fs');
 const path = require('path');
 const { marked } = require('marked');
 const matter = require('gray-matter');
+const footnote = require('marked-footnote');
+
+marked.use(footnote());
 
 const POSTS_DIR = path.join(__dirname, 'posts');
 const DIST_DIR = path.join(__dirname, 'dist');
@@ -77,7 +80,7 @@ function build() {
         const fileContent = fs.readFileSync(filePath, 'utf-8');
         const { data, content } = matter(fileContent);
         
-        const htmlContent = marked(content);
+        const htmlContent = marked.parse(content);
         const readingTime = getReadingTime(content);
         const date = formatDate(data.date);
         const slug = file.replace('.md', '');
