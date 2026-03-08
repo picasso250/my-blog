@@ -1,0 +1,6 @@
+services:
+  - type: web
+    name: xyz-blog
+    runtime: static
+    buildCommand: npm install && npm run build
+    staticPublishPath: ./dist

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{title}} - 我的博客</title>
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        .post-page {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        .post-header {
+            margin-bottom: 2rem;
+        }
+        .post-header .post-category {
+            display: inline-block;
+            background-color: #3498db;
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            margin-bottom: 0.75rem;
+        }
+        .post-header h1 {
+            font-size: 2.5rem;
+            color: #2c3e50;
+            margin-bottom: 1rem;
+        }
+        .post-header .post-meta {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        .post-body {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .post-body h1 { font-size: 2rem; margin: 1.5rem 0 1rem; color: #2c3e50; }
+        .post-body h2 { font-size: 1.5rem; margin: 1.5rem 0 1rem; color: #2c3e50; border-bottom: 1px solid #eee; padding-bottom: 0.5rem; }
+        .post-body h3 { font-size: 1.25rem; margin: 1.25rem 0 0.75rem; color: #34495e; }
+        .post-body p { margin-bottom: 1rem; line-height: 1.8; }
+        .post-body ul, .post-body ol { margin-bottom: 1rem; padding-left: 2rem; }
+        .post-body li { margin-bottom: 0.5rem; line-height: 1.6; }
+        .post-body code { 
+            background: #f4f4f4; 
+            padding: 0.2rem 0.4rem; 
+            border-radius: 4px; 
+            font-family: 'Consolas', monospace;
+            font-size: 0.9em;
+        }
+        .post-body pre { 
+            background: #2c3e50; 
+            color: #ecf0f1; 
+            padding: 1rem; 
+            border-radius: 8px; 
+            overflow-x: auto;
+            margin-bottom: 1rem;
+        }
+        .post-body pre code { 
+            background: none; 
+            padding: 0; 
+            color: inherit;
+        }
+        .post-body blockquote {
+            border-left: 4px solid #3498db;
+            padding-left: 1rem;
+            margin: 1rem 0;
+            color: #666;
+            font-style: italic;
+        }
+        .post-body a {
+            color: #3498db;
+            text-decoration: none;
+        }
+        .post-body a:hover {
+            text-decoration: underline;
+        }
+        .post-body img {
+            max-width: 100%;
+            border-radius: 8px;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 1rem;
+            color: #3498db;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="logo">
+                <a href="../index.html">我的博客</a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="../index.html">首页</a></li>
+                <li><a href="../about.html">关于</a></li>
+                <li><a href="../contact.html">联系</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="post-page">
+        <a href="../index.html" class="back-link">← 返回首页</a>
+        
+        <article class="post-header">
+            <span class="post-category">{{category}}</span>
+            <h1>{{title}}</h1>
+            <div class="post-meta">
+                <span class="date">{{date}}</span>
+            </div>
+        </article>
+
+        <div class="post-body">
+            {{content}}
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>我的博客</h3>
+                    <p>记录成长，分享知识</p>
+                </div>
+                <div class="footer-section">
+                    <h3>快速链接</h3>
+                    <ul>
+                        <li><a href="../index.html">首页</a></li>
+                        <li><a href="../about.html">关于</a></li>
+                        <li><a href="../contact.html">联系</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>社交媒体</h3>
+                    <ul class="social-links">
+                        <li><a href="#">GitHub</a></li>
+                        <li><a href="#">Twitter</a></li>
+                        <li><a href="#">LinkedIn</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 我的博客. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../script.js"></script>
+</body>
+</html>

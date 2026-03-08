@@ -1,45 +1,98 @@
 # 我的博客
 
-一个简洁优雅的个人博客网站，使用纯 HTML、CSS 和 JavaScript 构建。
+一个基于 Markdown 的静态博客系统，写 Markdown 文件即可发布文章。
 
-## 功能特点
+## 快速开始
 
-- 📝 响应式设计，支持移动端
-- 🎨 现代简洁的界面
-- ⚡ 轻量级，无需构建工具
-- 🔄 平滑的动画效果
-- 📱 回到顶部按钮
-- 📧 联系表单
-
-## 页面结构
-
-- `index.html` - 主页，展示博客文章列表
-- `about.html` - 关于页面
-- `contact.html` - 联系页面
-- `style.css` - 样式文件
-- `script.js` - JavaScript 交互
-
-## 本地运行
-
-直接在浏览器中打开 `index.html` 文件即可查看博客。
-
-或者使用本地服务器：
+### 1. 安装依赖
 
 ```bash
-# 使用 Python
-python -m http.server 8000
-
-# 使用 Node.js (需要安装 http-server)
-npx http-server
+npm install
 ```
 
-然后在浏览器中访问 `http://localhost:8000`
+### 2. 写文章
+
+在 `posts/` 目录下创建 Markdown 文件，格式如下：
+
+```markdown
+---
+title: 文章标题
+date: 2026-03-08
+category: 技术
+emoji: 📝
+---
+
+文章内容...
+```
+
+Frontmatter 字段说明：
+- `title`: 文章标题（必填）
+- `date`: 发布日期（必填，格式 YYYY-MM-DD）
+- `category`: 分类（必填）
+- `emoji`: 封面图标（可选，默认 📝）
+
+### 3. 构建
+
+```bash
+npm run build
+```
+
+构建后的静态文件在 `dist/` 目录。
+
+### 4. 预览
+
+```bash
+npm run dev
+```
+
+浏览器会自动打开 http://localhost:8080
+
+开发模式下会自动监听 `posts/` 目录的变化，修改或添加文章后自动重新构建。
+
+## 目录结构
+
+```
+my-blog/
+├── posts/              # Markdown 文章目录
+│   ├── article-1.md
+│   └── article-2.md
+├── templates/          # 模板目录
+│   └── post.html       # 文章页面模板
+├── dist/               # 构建输出目录
+│   ├── index.html
+│   ├── posts/
+│   ├── style.css
+│   └── ...
+├── build.js            # 构建脚本
+├── index.html          # 首页模板
+├── style.css           # 样式文件
+├── script.js           # JavaScript 文件
+├── about.html          # 关于页面
+├── contact.html        # 联系页面
+└── package.json
+```
+
+## 发布新文章
+
+1. 在 `posts/` 目录创建新的 `.md` 文件
+2. 添加 frontmatter 和内容
+3. 运行 `npm run build`
+4. 将 `dist/` 目录部署到任意静态托管服务
+
+## 部署
+
+`dist/` 目录可以直接部署到：
+- GitHub Pages
+- Netlify
+- Vercel
+- Cloudflare Pages
+- 或任何静态文件服务器
 
 ## 技术栈
 
-- HTML5
-- CSS3
-- Vanilla JavaScript
+- Node.js
+- marked (Markdown 解析)
+- gray-matter (Frontmatter 解析)
 
 ## 许可证
 
