@@ -84,18 +84,15 @@ function generatePostHtml(template, post) {
 
 function generateIndexPostCard(post) {
     return `                <article class="post-card">
-                    <div class="post-image">
-                        <div class="placeholder-image">${post.emoji || '📝'}</div>
-                    </div>
-                    <div class="post-content">
+                    <div class="post-meta-line">
+                        <span class="date">${post.date}</span>
+                        <span class="meta-divider">/</span>
                         <span class="post-category">${post.category}</span>
-                        <h3><a href="${post.url}">${post.title}</a></h3>
-                        <p class="post-excerpt">${post.excerpt}</p>
-                        <div class="post-meta">
-                            <span class="date">${post.date}</span>
-                            <span class="read-time">${post.readingTime} 分钟阅读</span>
-                        </div>
+                        <span class="meta-divider">/</span>
+                        <span class="read-time">${post.readingTime} 分钟阅读</span>
                     </div>
+                    <h3><a href="${post.url}">${post.title}</a></h3>
+                    <p class="post-excerpt">${post.excerpt}</p>
                 </article>`;
 }
 
@@ -127,11 +124,7 @@ function build() {
         const canonicalUrl = `${SITE_URL}/${url}`;
         const metaDescription = getMetaDescription(content);
         
-        const excerpt = content
-            .replace(/^#.*$/gm, '')
-            .replace(/\n/g, ' ')
-            .substring(0, 100)
-            .trim() + '...';
+        const excerpt = stripMarkdown(content).substring(0, 100).trim() + '...';
         
         const post = {
             title: data.title,
