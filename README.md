@@ -97,7 +97,7 @@ npm run deploy
 其底层实际调用：
 
 ```bash
-wrangler deploy -c wrangler.worker.toml
+wrangler deploy
 ```
 
 ## 技术栈
