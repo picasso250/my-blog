@@ -49,6 +49,23 @@
             border-radius: 8px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
+        .comments-section {
+            margin-top: 2rem;
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .comments-section h2 {
+            font-size: 1.4rem;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+        .comments-section p {
+            color: #666;
+            margin-bottom: 1.25rem;
+            line-height: 1.7;
+        }
         .post-body h1 { font-size: 2rem; margin: 1.5rem 0 1rem; color: #2c3e50; }
         .post-body h2 { font-size: 1.5rem; margin: 1.5rem 0 1rem; color: #2c3e50; border-bottom: 1px solid #eee; padding-bottom: 0.5rem; }
         .post-body h3 { font-size: 1.25rem; margin: 1.25rem 0 0.75rem; color: #34495e; }
@@ -165,6 +182,26 @@
         <div class="post-body">
             {{content}}
         </div>
+
+        <section class="comments-section">
+            <h2>评论</h2>
+            <p>有异议、有补充，或只想留一句话，皆可直言。我要的不是客气话，而是真反馈。</p>
+            <script src="https://giscus.app/client.js"
+                data-repo="picasso250/my-blog"
+                data-repo-id="R_kgDORhYfJQ"
+                data-category="BlogComments"
+                data-category-id="DIC_kwDORhYfJc4C7H3l"
+                data-mapping="pathname"
+                data-strict="0"
+                data-reactions-enabled="1"
+                data-emit-metadata="0"
+                data-input-position="bottom"
+                data-theme="preferred_color_scheme"
+                data-lang="zh-CN"
+                crossorigin="anonymous"
+                async>
+            </script>
+        </section>
     </main>
 
     <footer>
