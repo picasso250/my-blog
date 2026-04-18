@@ -1,0 +1,10 @@
+name = "blog-io99"
+compatibility_date = "2026-04-18"
+workers_dev = false
+
+[assets]
+directory = "./dist"
+
+[[routes]]
+pattern = "blog.io99.xyz"
+custom_domain = true

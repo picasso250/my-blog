@@ -85,8 +85,20 @@ my-blog/
 - GitHub Pages
 - Netlify
 - Vercel
-- Cloudflare Pages
+- Cloudflare Workers Static Assets
 - 或任何静态文件服务器
+
+当前仓库默认部署到 `blog.io99.xyz`，使用：
+
+```bash
+npm run deploy
+```
+
+其底层实际调用：
+
+```bash
+wrangler deploy -c wrangler.worker.toml
+```
 
 ## 技术栈
 

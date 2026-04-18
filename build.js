@@ -9,11 +9,28 @@ marked.use(footnote());
 const POSTS_DIR = path.join(__dirname, 'posts');
 const DIST_DIR = path.join(__dirname, 'dist');
 const TEMPLATE_FILE = path.join(__dirname, 'templates', 'post.html');
+const SITE_URL = 'https://blog.io99.xyz';
+const SITE_NAME = '我的博客';
+const SITE_DESCRIPTION = '记录成长，分享知识。这里写技术、阅读与思考。';
 
 function ensureDir(dir) {
     if (!fs.existsSync(dir)) {
         fs.mkdirSync(dir, { recursive: true });
     }
+}
+
+function cleanDir(dir) {
+    if (fs.existsSync(dir)) {
+        fs.rmSync(dir, { recursive: true, force: true });
+    }
+}
+
+function escapeHtml(value = '') {
+    return String(value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
 }
 
 function getReadingTime(content) {
@@ -36,11 +53,32 @@ function formatDate(dateStr) {
     }).replace(/\//g, '-');
 }
 
+function stripMarkdown(content) {
+    return content
+        .replace(/```[\s\S]*?```/g, ' ')
+        .replace(/`[^`]*`/g, ' ')
+        .replace(/!\[[^\]]*\]\([^)]+\)/g, ' ')
+        .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+        .replace(/^\[\^.+?\]:.*$/gm, ' ')
+        .replace(/^#+\s+/gm, '')
+        .replace(/[*_>#-]/g, ' ')
+        .replace(/\n+/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+}
+
+function getMetaDescription(content) {
+    return stripMarkdown(content).substring(0, 160).trim();
+}
+
 function generatePostHtml(template, post) {
     return template
-        .replace(/\{\{title\}\}/g, post.title)
-        .replace(/\{\{category\}\}/g, post.category)
-        .replace(/\{\{date\}\}/g, post.date)
+        .replace(/\{\{title\}\}/g, escapeHtml(post.title))
+        .replace(/\{\{category\}\}/g, escapeHtml(post.category))
+        .replace(/\{\{date\}\}/g, escapeHtml(post.date))
+        .replace(/\{\{description\}\}/g, escapeHtml(post.metaDescription))
+        .replace(/\{\{canonicalUrl\}\}/g, escapeHtml(post.canonicalUrl))
+        .replace(/\{\{siteName\}\}/g, escapeHtml(SITE_NAME))
         .replace(/\{\{content\}\}/g, post.htmlContent);
 }
 
@@ -63,7 +101,8 @@ function generateIndexPostCard(post) {
 
 function build() {
     console.log('开始构建博客...\n');
-    
+
+    cleanDir(DIST_DIR);
     ensureDir(DIST_DIR);
     ensureDir(path.join(DIST_DIR, 'posts'));
     
@@ -85,6 +124,8 @@ function build() {
         const date = formatDate(data.date);
         const slug = file.replace('.md', '');
         const url = `posts/${slug}.html`;
+        const canonicalUrl = `${SITE_URL}/${url}`;
+        const metaDescription = getMetaDescription(content);
         
         const excerpt = content
             .replace(/^#.*$/gm, '')
@@ -101,6 +142,8 @@ function build() {
             excerpt: excerpt,
             readingTime: readingTime,
             htmlContent: htmlContent,
+            metaDescription: metaDescription,
+            canonicalUrl: canonicalUrl,
             sortDate: new Date(data.date)
         };
         
@@ -126,6 +169,25 @@ function build() {
     
     fs.writeFileSync(path.join(DIST_DIR, 'index.html'), newIndexHtml);
     console.log('\n✓ 生成首页');
+
+    const sitemapUrls = [
+        { loc: `${SITE_URL}/`, changefreq: 'weekly', priority: '1.0' },
+        { loc: `${SITE_URL}/about.html`, changefreq: 'monthly', priority: '0.6' },
+        { loc: `${SITE_URL}/contact.html`, changefreq: 'monthly', priority: '0.4' },
+        ...posts.map(post => ({
+            loc: post.canonicalUrl,
+            changefreq: 'monthly',
+            priority: '0.8'
+        }))
+    ];
+
+    const sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${sitemapUrls.map(url => `  <url>\n    <loc>${escapeHtml(url.loc)}</loc>\n    <changefreq>${url.changefreq}</changefreq>\n    <priority>${url.priority}</priority>\n  </url>`).join('\n')}\n</urlset>\n`;
+    fs.writeFileSync(path.join(DIST_DIR, 'sitemap.xml'), sitemap);
+    console.log('✓ 生成: sitemap.xml');
+
+    const robots = `User-agent: *\nAllow: /\n\nSitemap: ${SITE_URL}/sitemap.xml\n`;
+    fs.writeFileSync(path.join(DIST_DIR, 'robots.txt'), robots);
+    console.log('✓ 生成: robots.txt');
     
     const staticFiles = ['style.css', 'script.js', 'about.html', 'contact.html'];
     staticFiles.forEach(file => {

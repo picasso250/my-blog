@@ -4,7 +4,8 @@
   "description": "一个基于 Markdown 的静态博客",
   "scripts": {
     "build": "node build.js",
-    "dev": "concurrently \"node watch.js\" \"live-server dist -p 8080\""
+    "dev": "concurrently \"node watch.js\" \"live-server dist -p 8080\"",
+    "deploy": "npm run build && wrangler deploy -c wrangler.worker.toml"
   },
   "dependencies": {
     "gray-matter": "^4.0.3",
