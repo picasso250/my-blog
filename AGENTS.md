@@ -22,3 +22,4 @@
 - 文章文件名用 kebab-case。
 - `date` 用 `YYYY-MM-DD`。
 - `wrangler whoami` 超时，不等于无权。
+- 每次修改完毕后，确保 `live-server` 正在服务 `dist/`，便于立即验看。
