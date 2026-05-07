@@ -172,6 +172,34 @@ a:hover {
     line-height: 1.75;
 }
 
+/* ── Tables ── */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+    font-size: 0.95rem;
+}
+
+th, td {
+    padding: 0.6rem 0.9rem;
+    text-align: left;
+    border: 1px solid var(--line);
+}
+
+th {
+    background-color: var(--paper-deep);
+    font-weight: 600;
+    color: var(--ink);
+}
+
+tr:nth-child(even) td {
+    background-color: rgba(0,0,0,0.02);
+}
+
+td code {
+    font-size: 0.9em;
+}
+
 footer {
     margin-top: 2rem;
     padding: 1.5rem 0 2rem;
