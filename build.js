@@ -10,8 +10,8 @@ const POSTS_DIR = path.join(__dirname, 'posts');
 const DIST_DIR = path.join(__dirname, 'dist');
 const TEMPLATE_FILE = path.join(__dirname, 'templates', 'post.html');
 const SITE_URL = 'https://blog.io99.xyz';
-const SITE_NAME = '我的博客';
-const SITE_DESCRIPTION = '记录成长，分享知识。这里写技术、阅读与思考。';
+const SITE_NAME = '实然录';
+const SITE_DESCRIPTION = '去滤镜，见本质。拆解技术、AI 与文明。';
 
 function ensureDir(dir) {
     if (!fs.existsSync(dir)) {
