@@ -105,33 +105,62 @@ function build() {
     
     const template = fs.readFileSync(TEMPLATE_FILE, 'utf-8');
     
-    const postFiles = fs.readdirSync(POSTS_DIR)
-        .filter(file => file.endsWith('.md'))
-        .sort((a, b) => b.localeCompare(a));
-    
+    const PART_RE = /\.part(\d+)\.md$/i;
+
+    const allMdFiles = fs.readdirSync(POSTS_DIR)
+        .filter(file => file.endsWith('.md'));
+
+    const regularFiles = [];
+    const partGroups = {};
+
+    for (const file of allMdFiles) {
+        const m = file.match(PART_RE);
+        if (m) {
+            const slug = file.replace(PART_RE, '');
+            if (!partGroups[slug]) partGroups[slug] = [];
+            partGroups[slug].push({ file, num: parseInt(m[1]) });
+        } else {
+            regularFiles.push(file);
+        }
+    }
+
+    // Check conflict: slug appearing in both regular and part files
+    for (const file of regularFiles) {
+        const slug = file.replace('.md', '');
+        if (partGroups[slug]) {
+            console.error(`\n✗ 错误：slug "${slug}" 同时存在普通文件 "${file}" 和 part 组，请统一命名方式。`);
+            process.exit(1);
+        }
+    }
+
+    // Sort each part group by numeric order, check gaps
+    for (const [slug, entries] of Object.entries(partGroups)) {
+        entries.sort((a, b) => a.num - b.num);
+        for (let i = 0; i < entries.length; i++) {
+            if (entries[i].num !== i + 1) {
+                console.warn(`⚠ 警告：文章 "${slug}" 缺 part${i + 1}（有 part${entries[i].num} 但无 part${i + 1}）`);
+            }
+        }
+    }
+
     const posts = [];
-    
-    postFiles.forEach(file => {
-        const filePath = path.join(POSTS_DIR, file);
-        const fileContent = fs.readFileSync(filePath, 'utf-8');
-        const { data, content } = matter(fileContent);
-        
+
+    function processPost(data, content, slug) {
         const htmlContent = marked.parse(content);
         const readingTime = getReadingTime(content);
         const date = formatDate(data.date);
-        const slug = file.replace('.md', '');
         const url = `posts/${slug}.html`;
         const canonicalUrl = `${SITE_URL}/${url}`;
         const metaDescription = getMetaDescription(content);
-        
         const excerpt = stripMarkdown(content).substring(0, 100).trim() + '...';
-        
-        const post = {
+
+        return {
             title: data.title,
             date: date,
             category: data.category,
             emoji: data.emoji || '📝',
             url: url,
+            slug: slug,
             excerpt: excerpt,
             readingTime: readingTime,
             htmlContent: htmlContent,
@@ -139,15 +168,40 @@ function build() {
             canonicalUrl: canonicalUrl,
             sortDate: new Date(data.date)
         };
-        
+    }
+
+    function writePost(post) {
         posts.push(post);
-        
         const postHtml = generatePostHtml(template, post);
-        const outputPath = path.join(DIST_DIR, 'posts', `${slug}.html`);
+        const outputPath = path.join(DIST_DIR, 'posts', `${post.slug}.html`);
         fs.writeFileSync(outputPath, postHtml);
-        
         console.log(`✓ 生成文章: ${post.title}`);
-    });
+    }
+
+    // Process regular files
+    for (const file of regularFiles) {
+        const filePath = path.join(POSTS_DIR, file);
+        const fileContent = fs.readFileSync(filePath, 'utf-8');
+        const { data, content } = matter(fileContent);
+        const slug = file.replace('.md', '');
+        writePost(processPost(data, content, slug));
+    }
+
+    // Process part groups
+    for (const [slug, entries] of Object.entries(partGroups)) {
+        const firstPath = path.join(POSTS_DIR, entries[0].file);
+        const firstContent = fs.readFileSync(firstPath, 'utf-8');
+        const { data } = matter(firstContent);
+
+        let mergedMd = '';
+        for (const entry of entries) {
+            const fileContent = fs.readFileSync(path.join(POSTS_DIR, entry.file), 'utf-8');
+            const { content } = matter(fileContent);
+            mergedMd += (mergedMd ? '\n\n' : '') + content;
+        }
+
+        writePost(processPost(data, mergedMd, slug));
+    }
     
     posts.sort((a, b) => b.sortDate - a.sortDate);
     
