@@ -248,7 +248,7 @@ function build() {
     
     console.log(`\n构建完成！共 ${posts.length} 篇文章`);
     console.log(`输出目录: ${DIST_DIR}`);
-    console.log('\n运行 npm run dev 启动本地服务器预览');
+    console.log('\n可运行 npm run dev 启动本地服务器预览');
 }
 
 build();
