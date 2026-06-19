@@ -30,6 +30,7 @@
 - 位置：`posts/` 下，文件名 kebab-case。
 - 可拆为多 part，用 `*.partN.md` 格式。
 - 每一part的开头第一行，必须是 ## 二级标题。
+- Paul Graham 风格讲究「先给论点，再给证据，最后给框架」
 
 ## Notes
 - 文章文件名用 kebab-case。
