@@ -5,13 +5,24 @@ const chokidar = require('chokidar');
 
 const POSTS_DIR = path.join(__dirname, 'posts');
 
+let buildRunning = false;
+let buildPending = false;
+
 function runBuild() {
+    if (buildRunning) {
+        buildPending = true;
+        return;
+    }
+    buildRunning = true;
+    buildPending = false;
     console.log('\n🔄 检测到变化，重新构建...\n');
     const build = spawn('node', ['build.js'], { stdio: 'inherit', shell: true });
     build.on('close', (code) => {
         if (code === 0) {
             console.log('\n✅ 构建完成，浏览器将自动刷新\n');
         }
+        buildRunning = false;
+        if (buildPending) runBuild();
     });
 }
 
